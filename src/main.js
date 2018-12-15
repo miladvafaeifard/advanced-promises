@@ -10,9 +10,12 @@ const queryAPI = query => fetch(starWarsUrl + query)
    })
 
 
-queryAPI('films').then(films =>
-      queryAPI('planets').then(planets =>
-         output.innerHTML = `${films.length} films and ${planets.length} planets`
-      )
+const promise = Promise.all([
+   queryAPI('films'),
+   queryAPI('planets'),
+])
+
+promise.then(results =>
+      output.innerHTML = `${results[0].length} films and ${results[1].length} planets`
    )
    .finally(_ => spinner.remove())
