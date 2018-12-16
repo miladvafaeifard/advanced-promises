@@ -3,19 +3,28 @@ const starWarsUrl = "https://starwars.egghead.training/"
 const output = document.getElementById('output')
 const spinner = document.getElementById('spinner')
 
-const queryAPI = query => fetch(starWarsUrl + query)
-   .then(res => {
-      return res.ok ? res.json() :
-         Promise.reject(Error('Unsuccessful response'))
-   })
+const queryAPI = async(query) => {
+   const response = await fetch(starWarsUrl + query)
+   if(response.ok){
+      return response.json()
+   } else {
+      throw Error('Unsuccessful response')
+   }
+}
 
-
-const promise = Promise.all([
-   queryAPI('films'),
-   queryAPI('planets'),
-])
-
-promise.then(([films, planets]) =>
+const main = async() => {
+   try {
+      const [films, planets] = await Promise.all([
+         queryAPI('films'),
+         queryAPI('planets'),
+      ])
       output.innerHTML = `${films.length} films and ${planets.length} planets`
-   )
-   .finally(_ => spinner.remove())
+   } catch (error) {
+      console.log(error)
+      output.innerHTML = ":("
+   } finally {
+      spinner.remove()
+   }
+}
+
+main()
