@@ -15,7 +15,7 @@ const promise = Promise.all([
    queryAPI('planets'),
 ])
 
-promise.then(results =>
-      output.innerHTML = `${results[0].length} films and ${results[1].length} planets`
+promise.then(([films, planets]) =>
+      output.innerHTML = `${films.length} films and ${planets.length} planets`
    )
    .finally(_ => spinner.remove())
